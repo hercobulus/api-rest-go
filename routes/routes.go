@@ -4,10 +4,14 @@ import (
 	"api-rest-go/controllers"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func HandlerRequest() {
-	http.HandleFunc("/", controllers.Home)
-	http.HandleFunc("/personalidades", controllers.TodasPersonalidades)
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	r := mux.NewRouter()
+	r.HandleFunc("/", controllers.Home)
+	r.HandleFunc("/personalidades", controllers.TodasPersonalidades).Methods("Get")
+	r.HandleFunc("/personalidades/{id}", controllers.GetPersonalidade).Methods("Get")
+	log.Fatal(http.ListenAndServe(":8000", r))
 }
